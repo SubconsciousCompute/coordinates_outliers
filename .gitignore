@@ -1,0 +1,7 @@
+/target
+/Cargo.lock
+
+/.idea
+
+# TODO: remove code in main.rs to examples
+# /src/main.rs
