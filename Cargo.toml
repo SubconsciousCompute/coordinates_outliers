@@ -1,6 +1,6 @@
 [package]
 name = "coordinates_outliers"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["sn99 <siddharthn.099@gmail.com>"]
 description = "A simple outlier detection in 2D paths taken"
@@ -8,7 +8,7 @@ repository = "https://github.com/sn99/location_outliers"
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/sn99/location_outliers"
-keywords = ["accumulator", "location", "outliers", "graphs"]
+keywords = ["accumulator", "location", "outliers", "graphs", "coordinates"]
 documentation = "https://docs.rs/location_outliers"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
