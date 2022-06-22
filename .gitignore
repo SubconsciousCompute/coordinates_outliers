@@ -3,5 +3,4 @@
 
 /.idea
 
-# TODO: remove code in main.rs to examples
-# /src/main.rs
+/src/main.rs

@@ -1,5 +1,33 @@
-//! Simple lib to find outliers or path taken less frequently than others
-
+//! Find relationships in a series of location assuming `[A,B,A]` implies `A->B->A` and `A,B` are of
+//! type `Point`.
+//!
+//! Simple lib to find outliers or path taken less or more frequently than others.
+//!
+//! We store location in form of `Point(x: f64, y: f64)`, they are automatically rounded off to 3 decimal places when using
+//! `new` method on `Point`. We assume `x,y` are `latitude and longitude` and don't need more than
+//! [3 decimal places of precision](https://gis.stackexchange.com/questions/8650/measuring-accuracy-of-latitude-and-longitude#:~:text=The%20first%20decimal%20place%20is,one%20village%20from%20the%20next.).
+//!
+//! Relevant [xkcd](https://xkcd.com/2170/)
+//!
+//! ![location precision](https://imgs.xkcd.com/comics/coordinate_precision.png)
+//!
+//! Usage:
+///
+/// ```rust
+/// use coordinates_outliers::{Point, PointPlane};
+/// let a = Point::new(0.123, 0.123);
+/// let b = Point::new(1.123, 1.123);
+/// let c = Point::new(2.123, 2.123);
+/// let d = Point::new(3.123, 3.123);
+/// let e = Point::new(0.123, 0.123);
+/// let f = Point::new(1.123, 1.123);
+///
+/// let points = vec![a, b, c, d, e, f];
+///
+/// let k = PointPlane::new(points, 100);
+///
+/// println!("{:#?}", k);
+///
 use simple_accumulator::SimpleAccumulator;
 use std::cell::Cell;
 use std::collections::{HashMap, HashSet};
@@ -14,11 +42,11 @@ pub struct Point {
 }
 
 impl Point {
-    /// We round off the location to upto 5 decimal places
+    /// We round off the location to upto `3` decimal places
     pub fn new(x: f64, y: f64) -> Self {
         Point {
-            x: f64::trunc(x * 100000.0) / 100000.0,
-            y: f64::trunc(y * 100000.0) / 100000.0,
+            x: f64::trunc(x * 1000.0) / 1000.0,
+            y: f64::trunc(y * 1000.0) / 1000.0,
         }
     }
 }
@@ -30,7 +58,7 @@ impl fmt::Display for Point {
     }
 }
 
-/// This represents and directed edge A->B, we use the coordinates to compute the hashes but not the
+/// This represents and directed edge `A->B`, we use the coordinates to compute the hashes but not the
 /// weight, with weight being the number of times that path is taken
 ///
 /// We store coordinates in string as `floats` are not comparable or hashable in a reliable way
@@ -41,21 +69,24 @@ pub struct Connection(String, String, Cell<usize>);
 /// Eq for connection
 impl Eq for Connection {}
 
-/// Any way to compare a node, Eg: (1.22222, 4.12345) == (1.22222, 4.12345) == (4.12345, 1.22222)
+/// Way to compare an edge, Eg: (1.222, 4.123) == (1.222, 4.123) only
 impl PartialEq for Connection {
     fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0 && self.1 == other.1 || self.0 == other.1 && self.1 == other.0
+        self.0 == other.0 && self.1 == other.1
     }
 }
 
-/// This will make it easier to find the right connections
+/// This will make it easier to find the right connections. i.e. given `1.111` would match with
+/// `(1.111, 2.222)` or `(2.222, 1.111)`
 impl PartialEq<String> for Connection {
     fn eq(&self, other: &String) -> bool {
         self.0 == *other || self.1 == *other
     }
 }
 
-/// Custom hash for `Connection`
+/// Custom hash for `Connection`, we use the String values of `Connection(String, String, Cell<usize>)`
+/// to make hashes as `Cell<usize>` is used to keep track of frequency/weight of path aka how many times
+/// it was traversed
 impl Hash for Connection {
     fn hash<H: Hasher>(&self, hasher: &mut H) {
         self.0.hash(hasher);
@@ -93,9 +124,9 @@ pub struct PointPlane {
 impl PointPlane {
     /// Create new PointPlane
     pub fn new(points: Vec<Point>, capacity: usize) -> Self {
-        let mut graph = Graph(HashSet::<Connection>::new());
+        let mut graph = Graph(HashSet::<Connection>::with_capacity(100));
 
-        let mut frequencies: HashMap<String, u32> = HashMap::new();
+        let mut frequencies: HashMap<String, u32> = HashMap::with_capacity(100);
         let mut x = Vec::with_capacity(capacity);
         let mut y = Vec::with_capacity(capacity);
 
@@ -107,10 +138,8 @@ impl PointPlane {
             x.push(points[k].x);
             y.push(points[k].y);
             graph.push(&Connection(
-                (points[k - 1].x * 100000.0).to_string()
-                    + "-"
-                    + &*(points[k - 1].y * 100000.0).to_string(),
-                (points[k].x * 100000.0).to_string() + "-" + &*(points[k].y * 100000.0).to_string(),
+                (points[k - 1].x).to_string() + "-" + &*(points[k - 1].y).to_string(),
+                (points[k].x).to_string() + "-" + &*(points[k].y).to_string(),
                 Cell::new(0),
             ));
 
