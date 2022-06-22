@@ -1,6 +1,4 @@
-# location_outliers
-
------------------------------------------------------------------------
+# coordinates_outliers
 
 Find relationships in a series of location assuming `[A,B,A]` implies `A->B->A` and `A,B` are of 
 type `Point`.
