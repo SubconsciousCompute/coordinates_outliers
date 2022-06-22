@@ -9,7 +9,7 @@ We store location in form of `Point(x: f64, y: f64)`, they are automatically rou
 `new` method on `Point`. We assume `x,y` are `latitude and longitude` and don't need more than
 [3 decimal places of precision](https://gis.stackexchange.com/questions/8650/measuring-accuracy-of-latitude-and-longitude#:~:text=The%20first%20decimal%20place%20is,one%20village%20from%20the%20next.). 
 
-Use `cargo doc --open` for documentation or view it [here](https://docs.rs/location_outliers/latest/location_outliers/index.html)
+Use `cargo doc --open` for documentation or view it [here](https://docs.rs/coordinates_outliers/latest/coordinates_outliers/index.html)
 
 Relevant [xkcd](https://xkcd.com/2170/)
 
