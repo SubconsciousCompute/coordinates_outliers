@@ -7,10 +7,6 @@ jobs:
     strategy:
       matrix:
         rust: [ stable, nightly ]
-    steps:
-      - uses: actions/checkout@master
-        with:
-          fetch-depth: 0
-      - uses: boa-dev/criterion-compare-action@master
+      - uses: boa-dev/criterion-compare-action@v3.2.2
         with:
           branchName: ${{ github.base_ref }}
