@@ -7,5 +7,3 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: boa-dev/criterion-compare-action@v3.2.2
-        with:
-          branchName: ${{ github.base_ref }}
