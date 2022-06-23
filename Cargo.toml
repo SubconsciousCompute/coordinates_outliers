@@ -29,3 +29,11 @@ rand = "0.8.5"
 [[bench]]
 name = "benchmark"
 harness = false
+
+[lib]
+bench = false
+
+[[bin]]
+bench = false
+name = "coordinates_outliers"
+path = "src/main.rs"
