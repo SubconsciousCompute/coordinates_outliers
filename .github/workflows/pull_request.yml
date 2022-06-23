@@ -1,0 +1,16 @@
+on: [pull_request]
+name: benchmark pull requests
+jobs:
+  runBenchmark:
+    name: run benchmark
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust: [ stable, nightly ]
+    steps:
+      - uses: actions/checkout@master
+        with:
+            fetch-depth: 0
+      - uses: boa-dev/criterion-compare-action@master
+        with:
+          branchName: ${{ github.base_ref }}
