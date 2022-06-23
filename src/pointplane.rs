@@ -117,11 +117,11 @@ impl PointPlane {
         }
     }
 
-    /// Remove values based how many time it occurs
+    /// Remove values based how many time it occurs, e.i. values occurring <= given frequency will be removed
     pub fn retain(&mut self, frequency: usize) {
         self.points
-            .retain(|_, &mut point_frequency| point_frequency <= frequency);
+            .retain(|_, &mut point_frequency| point_frequency > frequency);
 
-        self.graph.0.retain(|k| k.2.get() <= frequency);
+        self.graph.0.retain(|k| k.2.get() > frequency);
     }
 }
