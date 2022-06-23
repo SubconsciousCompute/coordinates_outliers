@@ -2,11 +2,10 @@ on: [push]
 name: benchmark push
 jobs:
   runBenchmark:
-    name: run push benchmark
+    name: run benchmark
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rust: [ stable, nightly ]
-        - uses: boa-dev/criterion-compare-action@v3.2.2
-          with:
-            branchName: ${{ github.base_ref }}
+    steps:
+      - uses: actions/checkout@master
+      - uses: boa-dev/criterion-compare-action@v3.2.2
+        with:
+          branchName: ${{ github.base_ref }}
