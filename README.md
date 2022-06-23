@@ -1,5 +1,7 @@
 # coordinates_outliers
 
+[![Rust](https://github.com/sn99/coordinates_outliers/actions/workflows/rust.yml/badge.svg?branch=master)](https://github.com/sn99/coordinates_outliers/actions/workflows/rust.yml)
+
 Find relationships in a series of location assuming `[A,B,A]` implies `A->B->A` and `A,B` are of 
 type `Point`.
 

@@ -1,6 +1,6 @@
 [package]
 name = "coordinates_outliers"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 authors = ["sn99 <siddharthn.099@gmail.com>"]
 description = "A simple outlier detection in 2D paths taken"
